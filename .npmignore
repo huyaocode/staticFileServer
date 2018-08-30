@@ -1,4 +1,5 @@
-src
 test
-
+.editorconfig
+.eslintignore
+.eslintrc.js
 # npm上传需要忽略的东西

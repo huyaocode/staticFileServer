@@ -1,19 +1,27 @@
-const http = require('http');
-const chalk = require('chalk');
-const path = require('path');
+const yargs = require('yargs');
+const Server = require('./app');
 
-const conf = require('./config/defaultConfig');
-const route = require('./helper/route');
+const argv = yargs
+    .usage('fileserver [options]')
+    .option('p',{
+        alias: 'port',
+        describe: '端口号',
+        default: 9527
+    })
+    .option('h', {
+        alias: 'hostname',
+        describe: 'host',
+        default: '127.0.0.1'
+    })
+    .option('d',{
+        alias: 'root',
+        describe: 'root path',
+        default: process.cwd()
+    })
+    .version()
+    .alias('v', 'version')
+    .help()
+    .argv;
 
-const server = http.createServer((req, res) => {
-    //使用平台特定的分隔符把全部给定的 path 片段连接到一起，并规范化生成的路径。
-    const filePath = path.join(conf.root, req.url);
-    // fs.stat(filePath, (err, stats) => {});
-    route(req,res, filePath);
-    
-});
-
-server.listen(conf.post, conf.hostname, () => {
-    const addr = `http://${conf.hostname}:${conf.post}`;
-    console.info(`Sever running at ${chalk.green(addr)}`);
-});
+const server = new Server(argv);
+server.start();

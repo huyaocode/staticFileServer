@@ -4,23 +4,30 @@ const path = require('path');
 const Handlebars = require('handlebars');
 const promisify = require('util').promisify;
 
-const config = require('../config/defaultConfig');
 const mime = require('./mime');
 const compress = require('./compress');
 const tplPath = path.join(__dirname, '../template/dir.tpl');
-const range = require('./range.js');
+const range = require('./range');
+const isFresh = require('./cache');
 
 const stat = promisify(fs.stat);
 const readdir = promisify(fs.readdir);
 const source = fs.readFileSync(tplPath);  //同步方法
 const template = Handlebars.compile(source.toString());
 
-module.exports = async function (req, res, filePath) {
+module.exports = async function (req, res, filePath, config) {
     try {
         const stats = await stat(filePath);
         if (stats.isFile()) {
             const contentType = mime(filePath);
             res.setHeader('Content-Type', contentType);//直接在这里设置utf-8
+
+            //判断缓存是否可用
+            if(isFresh(stats, req, res)) {
+                res.statusCode = 304;
+                res.end();
+                return;
+            }
 
             let rs;
             const { code, start, end } = range(stats.size, req, res);
