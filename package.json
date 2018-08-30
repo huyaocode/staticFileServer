@@ -1,10 +1,10 @@
 {
-  "name": "fileserver",
-  "version": "1.0.0",
+  "name": "files-server",
+  "version": "1.0.2",
   "description": "静态资源服务器",
   "main": "src/app.js",
   "bin":{
-    "fileserver": "bin/fileserver"
+    "files-server": "bin/files-server"
   },
   "dependencies": {
     "chalk": "^2.4.1",

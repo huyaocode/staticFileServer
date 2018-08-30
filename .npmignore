@@ -2,4 +2,5 @@ test
 .editorconfig
 .eslintignore
 .eslintrc.js
+.vscode
 # npm上传需要忽略的东西

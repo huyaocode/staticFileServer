@@ -50,7 +50,7 @@ module.exports = async function (req, res, filePath, config) {
         } else if (stats.isDirectory()) {
             const files = await readdir(filePath);
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
             const dir = path.relative(config.root, filePath);
             const data = {
                 title: path.basename(filePath),
